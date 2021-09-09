@@ -1,10 +1,13 @@
-
 import peasy.*;
 
 PeasyCam cam;
 
 PVector[][] globe;
-int total = 20;
+int times = 0;
+int total = 19 + 1;
+int medios = 5;
+float dLeds = 0.05;
+String str = "";
 
 void setup() {
   size(1200, 800, P3D);
@@ -21,8 +24,15 @@ void draw() {
   
   for (int i = 1; i < total; i++) {
     float lat = map(i, 0, total, 0, PI);
-    for (int j = 0; j < total+1; j++) {
-      float lon = map(j, 0, total, 0, PI);
+
+    if (times == 0){
+      String numLeds = str (ceil ((2* PI * sin(lat))/dLeds));
+      str += numLeds + " ";
+    }
+
+
+    for (int j = 0; j <  total; j++) {
+      float lon = map(j, 0, total, 0, 2* PI);
       float x = r * sin(lat) * cos(lon);
       float y = r * sin(lat) * sin(lon);
       float z = r * cos(lat);
@@ -30,14 +40,24 @@ void draw() {
       globe[i][j] = new PVector(x, y, z);
       
     }
+    
   }
+
+
+//Numero de puntos en cada fila
+  times++;
+  if (times == 1){
+    println(str);
+    println("\n");
+  }
+
 
   stroke(255);
   strokeWeight(5);
   for (int i = 1; i < total; i++) {
 
     beginShape(POINTS);
-    for (int j = 0; j < total+1; j++) {
+    for (int j = 0; j < total; j++) {
       PVector v1 = globe[i][j];
       // if(j%2 ==0){
       //   vertex(v1.x*2, v1.y*2, v1.z*2);
@@ -49,3 +69,5 @@ void draw() {
     endShape();
   }
 }
+
+
